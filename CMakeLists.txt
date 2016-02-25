@@ -7,9 +7,11 @@ add_executable(${PROJECT_NAME} ${SRC_LIST})
 if (${CMAKE_SYSTEM_NAME} STREQUAL Linux)
     OPTION(USE_External_GLFW "Use GLFW externally (recommended for platforms which support pkgconfig like Linux" ON)
     OPTION(USE_External_GLEW "Use GLEW externally (recommended for platforms like Linux" ON)
+    OPTION(USE_External_GLM "Use GLM externally (recommended for platforms like Linux" ON)
 else (${CMAKE_SYSTEM_NAME} STREQUAL Linux)
     OPTION(USE_External_GLFW "Use GLFW externally (recommended for platforms which support pkgconfig like Linux" OFF)
     OPTION(USE_External_GLEW "Use GLEW externally (recommended for platforms like Linux" OFF)
+    OPTION(USE_External_GLM "Use GLM externally (recommended for platforms like Linux" OFF)
 endif (${CMAKE_SYSTEM_NAME} STREQUAL Linux)    
 ################################################################################
 
@@ -26,6 +28,7 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 ################################################################################
 
 find_package(OpenGL REQUIRED)
+
 if (${USE_External_GLEW})
     find_package(GLEW REQUIRED)
     set(externalLibs ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES})
@@ -34,6 +37,7 @@ else (${USE_External_GLEW})
     include_directories(${PROJECT_SOURCE_DIR}/external/glew/include)
     set(target_list ${PROJECT_NAME} glew)
 endif (${USE_External_GLEW})
+
 if (${USE_External_GLFW})
     find_package(PkgConfig REQUIRED)
     pkg_search_module(GLFW REQUIRED glfw3)
@@ -43,6 +47,10 @@ else (${USE_External_GLFW})
     include_directories(${PROJECT_SOURCE_DIR}/external/glfw/include)
     set(externalLibs ${externalLibs} glfw ${GLFW_LIBRARIES})
 endif (${USE_External_GLFW})
+
+if (NOT ${USE_External_GLM})
+    include_directories(${PROJECT_SOURCE_DIR}/external/glm)
+endif (NOT ${USE_External_GLM})
 
 target_link_libraries(${PROJECT_NAME} ${externalLibs})
 
