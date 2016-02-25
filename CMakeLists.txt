@@ -45,7 +45,7 @@ if (${USE_External_GLFW})
 else (${USE_External_GLFW})
     add_subdirectory(${PROJECT_SOURCE_DIR}/external/glfw)
     include_directories(${PROJECT_SOURCE_DIR}/external/glfw/include)
-    set(externalLibs ${externalLibs} glfw ${GLFW_LIBRARIES})
+    set(externalLibs ${externalLibs} glfw ${GLFW_STATIC_LIBRARIES})
 endif (${USE_External_GLFW})
 
 if (NOT ${USE_External_GLM})
